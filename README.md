@@ -1,33 +1,4 @@
-# SOAR Phishing Incident Response (Demo)
-**SOAR Phishing Incident Response System**
-
-- **Purpose:** Demonstrate a complete SOAR playbook for phishing: IOC extraction, TI enrichment, risk scoring and automated containment.
-- **Scope:** Educational/demo-capstone level. Integrations are optional and safe by default (simulated fallbacks used when API keys are not provided).
-
-**Project Overview**
-- The repository contains a runnable Python demo that shows an end-to-end phishing playbook: it ingests a sample phishing email, extracts IOCs, enriches them (optionally using third-party TI), computes a risk score, and triggers containment when the score meets the threshold.
-
-**Quick Start**
-- Prerequisites: Python 3.10+ and Git (optional).
-- Create and activate a virtual environment and install dependencies:
-
-```powershell
-python -m venv .venv; .\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-pip install -r requirements-dev.txt
-```
-
-- Run the demo:
-
-```powershell
-python .\playbook_demo.py
-```
-
-**Key Outputs**
-- `playbook_output.json`: full JSON artifact with `iocs`, `enriched`, `risk_score`, and `containment` (if executed).
-- `tests/`: unit and mocked integration tests.
-
-### SOAR Phishing Incident Response — Demo Playbook
+# SOAR Phishing Incident Response — Demo Playbook
 
 This repository demonstrates a simple, auditable SOAR-style phishing incident response playbook implemented in Python. It is intended for learning, prototyping, and capstone/demo use. Integrations with third-party services and identity providers are optional and are safe by default: if API keys are not provided, the code uses simulated, non-destructive fallbacks.
 
@@ -193,6 +164,6 @@ Notes: If you plan to use Docker containers in production, ensure the container 
 
 ---
 
-If you want, I can also:
-- Add a small `docs/runbook.md` with operator tasks for responding to an approved incident.
-- Create a 5-slide presentation summarizing the playbook and architecture.
+Artifacts
+- Operator runbook: `docs/runbook.md` (triage, approval, rollback, audit review).
+- 5-slide summary deck: `presentation/5_slide_deck.md` (architecture and runbook highlights).
