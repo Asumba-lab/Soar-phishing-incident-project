@@ -5,8 +5,18 @@ email gateway actions. Actions are simulated unless the corresponding
 API environment variables are configured.
 """
 from typing import Dict, List
+import os
+import json
+from datetime import datetime
+import logging
+from audit import log_audit
 
 from isolate_account import isolate_account
+from approval import get_approval
+
+logger = logging.getLogger(__name__)
+
+
 
 
 def reset_password(account_identifier: str) -> Dict[str, object]:
@@ -49,12 +59,7 @@ def quarantine_emails(iocs: List[str]) -> Dict[str, object]:
 
 
 def perform_containment(account_identifier: str, iocs: Dict[str, list]) -> Dict[str, object]:
-    results = {}
-    results["isolate"] = isolate_account(account_identifier)
-    results["reset_password"] = reset_password(account_identifier)
-    results["enforce_mfa"] = enforce_mfa(account_identifier)
-
-    # block domains found in IOCs
+    # Build the proposed action summary for approval/audit
     domains = set()
     for u in iocs.get("urls", []):
         try:
@@ -63,12 +68,51 @@ def perform_containment(account_identifier: str, iocs: Dict[str, list]) -> Dict[
             domains.add(domain)
         except Exception:
             continue
+
+    proposed_actions = {
+        "isolate": True,
+        "reset_password": True,
+        "enforce_mfa": True,
+        "blocked_domains": sorted(domains),
+        "quarantine_emails": iocs.get("emails", []),
+    }
+
+    approved = get_approval(account_identifier, proposed_actions)
+
+    audit_entry = {
+        "account": account_identifier,
+        "proposed_actions": proposed_actions,
+        "approved": bool(approved),
+    }
+
+    if not approved:
+        audit_entry["outcome"] = "denied"
+        try:
+            log_audit(audit_entry)
+        except Exception:
+            logger.exception("Failed to write audit log for denied approval")
+
+        return {"approved": False, "reason": "supervisor_denied"}
+
+    # Execute containment actions
+    results = {}
+    results["isolate"] = isolate_account(account_identifier)
+    results["reset_password"] = reset_password(account_identifier)
+    results["enforce_mfa"] = enforce_mfa(account_identifier)
+
     results["blocked_domains"] = {d: block_domain(d) for d in sorted(domains)}
 
-    # quarantine any emails found
     results["quarantine"] = quarantine_emails(iocs.get("emails", []))
 
-    return results
+    audit_entry["outcome"] = "executed"
+    audit_entry["results"] = results
+
+    try:
+        log_audit(audit_entry)
+    except Exception:
+        logger.exception("Failed to write audit log after containment execution")
+
+    return {"approved": True, "results": results}
 
 
 if __name__ == "__main__":
