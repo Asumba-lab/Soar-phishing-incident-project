@@ -1,6 +1,7 @@
 # SOAR PHISHING INCIDENT RESPONSE PROJECT REPORT
 
-**Author:** Steve Ogolla Asumba    
+**Author:** Steve Ogolla Asumba  
+**Institution:** —  
 **Module:** Cybersecurity / Capstone Project  
 **Year:** 2025
 
@@ -394,3 +395,4 @@ docker run --rm soar-phish-demo:latest
 
 *Submitted: December 2025*
 
+*Project Status: Complete and Validated*
