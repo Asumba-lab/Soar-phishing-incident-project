@@ -1,0 +1,8 @@
+Verification log
+
+- Scaffolded demo project on 2025-12-09
+- playbook_demo.py executed locally to validate outputs
+- Added containment orchestration and expanded containment actions (reset password, enforce MFA, block domains, quarantine emails)
+- Added optional TI integration stubs (VirusTotal, AbuseIPDB, Microsoft Defender)
+- Updated demo containment threshold to 80 and updated JSON playbook
+- Updated README with full project description and run instructions

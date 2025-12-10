@@ -1,0 +1,68 @@
+{
+  "iocs": {
+    "emails": [
+      "attacker@example.com",
+      "victim_user@example.com"
+    ],
+    "urls": [
+      "https://malicious.example.com/invoice.pdf"
+    ],
+    "ips": [],
+    "hashes": [
+      "d41d8cd98f00b204e9800998ecf8427e"
+    ]
+  },
+  "enriched": {
+    "emails": {
+      "attacker@example.com": {
+        "reputation": "suspicious",
+        "owner": "example.com"
+      },
+      "victim_user@example.com": {
+        "reputation": "suspicious",
+        "owner": "example.com"
+      }
+    },
+    "urls": {
+      "https://malicious.example.com/invoice.pdf": {
+        "reputation": "malicious"
+      }
+    },
+    "ips": {},
+    "hashes": {
+      "d41d8cd98f00b204e9800998ecf8427e": {
+        "malware_family": null,
+        "known_bad": false
+      }
+    }
+  },
+  "risk_score": 95,
+  "containment": {
+    "isolate": {
+      "account": "victim_user@example.com",
+      "action": "isolated",
+      "details": "simulated - no API keys configured"
+    },
+    "reset_password": {
+      "account": "victim_user@example.com",
+      "action": "password_reset_simulated"
+    },
+    "enforce_mfa": {
+      "account": "victim_user@example.com",
+      "action": "enforce_mfa_simulated"
+    },
+    "blocked_domains": {
+      "malicious.example.com": {
+        "domain": "malicious.example.com",
+        "action": "blocked_simulated"
+      }
+    },
+    "quarantine": {
+      "quarantined": [
+        "attacker@example.com",
+        "victim_user@example.com"
+      ],
+      "action": "quarantine_simulated"
+    }
+  }
+}

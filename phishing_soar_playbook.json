@@ -1,0 +1,10 @@
+{
+  "name": "Phishing Incident Response Playbook (Demo)",
+  "description": "A simplified JSON playbook representation used for demonstration and testing.",
+  "steps": [
+    {"id": 1, "name": "Extract IOCs", "action": "extract_iocs"},
+    {"id": 2, "name": "Enrich IOCs", "action": "enrich_iocs"},
+    {"id": 3, "name": "Compute Risk", "action": "compute_risk_score"},
+    {"id": 4, "name": "Containment", "action": "perform_containment", "when": "risk >= 80", "actions": ["disable_account","reset_password","enforce_mfa","block_domains","quarantine_emails"]}
+  ]
+}
